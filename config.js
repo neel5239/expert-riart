@@ -18,11 +18,11 @@ window.RISART = {
   // Scroll film — one entry per beat. Keep each line short. pos: "top" | "bottom" moves the text off the action.
   // vh = how long the beat holds while scrolling; longer beats get more of the film.
   beats: [
-    { h: "Art at your fingertips", p: "Hand-painted nails by Ri. One chair, one client, no rush.", vh: 110 },
-    { h: "It starts with one drop", p: "Deep crimson, laid down slow.", vh: 96 },
-    { h: "One stroke. Mirror gloss.", p: "Gel that levels itself and holds for weeks.", pos: "top", vh: 90 },
-    { h: "Finished by hand", p: "Gold leaf, chrome, tiny pearls. Detail you catch in every light.", pos: "top", vh: 180 },
-    { h: "Your turn", p: "The menu and booking are just below.", pos: "top", vh: 130 },
+    { logo: true, kicker: "RI'S ART · Nail Atelier", h: "Couture nails, crafted by hand", p: "Bespoke gel, sculpted extensions and freehand art. Private appointments, one client at a time.", vh: 120 },
+    { kicker: "The colour", h: "Chosen with intention", p: "Rich, pigment-dense lacquers matched to your skin tone, your style and your moment.", vh: 96 },
+    { kicker: "The finish", h: "Precision in every stroke", p: "Meticulous cuticle care, then a self-levelling gel with a mirror shine that lasts up to three weeks.", pos: "top", vh: 90 },
+    { kicker: "The detail", h: "Art that catches the light", p: "Gold leaf, chrome, pearls and hand-painted design, sketched with you and finished by hand.", pos: "top", vh: 180 },
+    { kicker: "Your appointment", h: "Your signature set awaits", p: "Explore the menu, try a look on your own hands, then reserve your chair below.", pos: "top", vh: 130 },
   ],
 
   // Portrait screens only see a slice of the 16:9 film. The crop follows the action:

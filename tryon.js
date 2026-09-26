@@ -274,20 +274,23 @@ function frame(id) {
 function startLoop() { running = true; frame(++loopId); }
 
 /* ------------------------------------------------------------------ camera + photo */
+let camError = '';
+const streamLive = () => !!stream && stream.getVideoTracks().some(t => t.readyState === 'live');
 async function startCamera() {
   stopCamera();
   if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
-    setHint('The camera needs a secure (https) page. Use "Photo" to try on a picture instead.');
+    setHint(camError = 'The camera needs a secure (https) page. Use "Photo" to try on a picture instead.');
     return false;
   }
   try {
     stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: facing }, width: { ideal: 1280 }, height: { ideal: 720 } } });
   } catch (e) {
     const denied = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError');
-    setHint(denied ? 'Camera access is blocked. Allow it in your browser settings, or use "Photo".' : 'No camera found. Use "Photo" to try on a picture instead.');
+    setHint(camError = denied ? 'Camera access is blocked. Allow it in your browser settings, or use "Photo".' : 'No camera found. Use "Photo" to try on a picture instead.');
     return false;
   }
   video.srcObject = stream;                       // <video autoplay muted playsinline> starts itself
+  video.play().catch(() => {});                   // older iOS needs the nudge
   video.classList.toggle('mirror', facing === 'user');
   await new Promise(r => (video.readyState >= 2 ? r() : video.addEventListener('loadeddata', r, { once: true })));
   hands = [];
@@ -304,10 +307,16 @@ function stopCamera() {
 async function goLive() {
   mode = 'live'; view.dataset.mode = 'live';
   photoCv.hidden = true; video.hidden = false;
+  // Ask for the camera the moment the visitor taps, so the browser's permission prompt shows at once
+  // (Safari would otherwise wait for the engine download). The engine loads behind the prompt.
+  // A camera that is already running is reused: restarting it makes Safari ask again.
+  const cam = streamLive() ? Promise.resolve(true) : startCamera();
   await loadEngine().catch(() => setHint('Try-on could not load. Check your connection and try again.'));
+  const ok = await cam;
   if (!landmarker) return;
   await landmarker.setOptions({ runningMode: 'VIDEO' });
-  if (await startCamera()) { setHint('Show the back of your hand, fingers spread.'); hintTimer = performance.now(); startLoop(); }
+  if (ok) { setHint('Show the back of your hand, fingers spread.'); hintTimer = performance.now(); if (!running) startLoop(); }
+  else setHint(camError);
 }
 
 async function goPhoto(file) {
@@ -468,9 +477,14 @@ $('#ar-book').addEventListener('click', () => {
   form.name.focus({ preventScroll: true });
 });
 
+// Leaving the tab pauses tracking but keeps the camera for a minute, so a quick app switch doesn't
+// trigger Safari's permission prompt again. After that the camera is released.
+let hiddenTimer = 0;
 document.addEventListener('visibilitychange', () => {
   if (!dlg.open || mode !== 'live') return;
-  if (document.hidden) stopCamera(); else goLive();
+  if (document.hidden) { running = false; hiddenTimer = setTimeout(stopCamera, 60000); return; }
+  clearTimeout(hiddenTimer);
+  if (streamLive()) { video.play().catch(() => {}); startLoop(); } else goLive();
 });
 
 document.addEventListener('click', e => {

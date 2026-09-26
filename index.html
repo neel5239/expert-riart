@@ -10,10 +10,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="preload" as="video" href="assets/film.mp4" type="video/mp4">
+  <link rel="preload" as="image" href="assets/logo.png">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js', 'is-loading');</script>
 </head>
 <body>
+
+  <!-- ============ LOADER: the film loads fully before the site opens ============ -->
+  <div class="loader" id="loader" role="status" aria-live="polite">
+    <img class="loader-logo" src="assets/logo.png" alt="RI'S ART" width="220" height="220">
+    <p class="loader-line">Nail Atelier <span aria-hidden="true">·</span> Hand-finished by Ri</p>
+    <div class="loader-bar" aria-hidden="true"><span id="loader-fill"></span></div>
+    <p class="loader-pct"><span id="loader-pct">0</span>%</p>
+  </div>
 
   <!-- ============ FILM: scroll-scrubbed, text only ============ -->
   <div class="film" id="film">
@@ -34,8 +43,8 @@
     <section class="plate" aria-labelledby="plate-h">
       <img class="plate-logo" src="assets/logo.png" alt="RI'S ART logo" width="380" height="380">
       <p class="label">Nail art studio · <span data-city></span></p>
-      <h1 id="plate-h">Nails painted by hand,<br><em>one client at a time.</em></h1>
-      <p class="lede">Gel, extensions and hand-painted art by Ri. Every set is planned with you, shaped for your hands, and finished slowly.</p>
+      <h1 id="plate-h">Nail artistry,<br><em>made for your hands.</em></h1>
+      <p class="lede">Bespoke gel, sculpted extensions and freehand nail art by Ri. Every set is designed with you, shaped to your hands and finished with a jeweller's eye for detail.</p>
       <div class="plate-actions">
         <a class="btn btn-lacquer" href="#book">Book a chair</a>
         <a class="btn btn-line" href="#menu">See the menu</a>

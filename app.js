@@ -6,7 +6,10 @@
 
   /* ---------- content from config ---------- */
   $('#beats').innerHTML = C.beats.map(b =>
-    `<section class="beat"${b.pos ? ` data-pos="${esc(b.pos)}"` : ''}${b.vh ? ` style="--vh:${Number(b.vh)}"` : ''}><h2>${esc(b.h)}</h2><p>${esc(b.p)}</p></section>`).join('');
+    `<section class="beat${b.logo ? ' beat-brand' : ''}"${b.pos ? ` data-pos="${esc(b.pos)}"` : ''}${b.vh ? ` style="--vh:${Number(b.vh)}"` : ''}>` +
+    (b.logo ? `<img class="beat-logo" src="assets/logo.png" alt="RI'S ART" width="132" height="132">` : '') +
+    (b.kicker ? `<p class="kicker">${esc(b.kicker)}</p>` : '') +
+    `<h2>${esc(b.h)}</h2><p>${esc(b.p)}</p></section>`).join('');
 
   $('#menu-groups').innerHTML = C.menu.map(g => `
     <div class="menu-group">
@@ -155,21 +158,58 @@
     raf = requestAnimationFrame(tick);
   }
 
-  // Load the whole film into memory, then scrub the local copy. Streaming it breaks scrubbing on phones:
-  // every seek becomes a new network request, and iPhones won't preload video before a tap at all.
+  // Loader: the whole film downloads into memory before the site opens, so scrubbing never stalls
+  // (streaming breaks it on phones: every seek is a new request, and iPhones won't preload video at all).
   // Apple devices get the MP4 (H.264); others get the smaller WebM when they can play it.
+  const loader = $('#loader'), fill = $('#loader-fill'), pct = $('#loader-pct');
+  const t0 = performance.now();
+  let shown = 0, revealed = false;
+  function setProgress(k) {
+    k = Math.max(shown, Math.min(1, k)); shown = k;
+    if (fill) fill.style.transform = `scaleX(${k})`;
+    if (pct) pct.textContent = Math.round(k * 100);
+  }
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    setProgress(1);
+    const wait = Math.max(0, 900 - (performance.now() - t0));        // long enough to see the logo
+    setTimeout(() => {
+      scrollTo(0, 0);
+      document.documentElement.classList.remove('is-loading');
+      loader?.classList.add('done');
+      loader?.setAttribute('aria-hidden', 'true');
+    }, wait);
+  }
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';  // the film always opens from its first frame
+  setTimeout(reveal, 25000);                                            // very slow connection: open anyway, film keeps streaming
+
   async function loadFilm() {
     const apple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && !/Chrome|Firefox/.test(navigator.userAgent));
     const sources = [...video.querySelectorAll('source')].map(el => ({ src: el.getAttribute('src'), type: el.type }));
     const order = apple ? sources.filter(x => x.type === 'video/mp4').concat(sources.filter(x => x.type !== 'video/mp4')) : sources;
     const pick = order.find(x => video.canPlayType(x.type)) || sources[sources.length - 1];
     video.addEventListener('loadedmetadata', onReady, { once: true });
+    // open the site once the first frame can be shown
+    video.addEventListener('loadeddata', () => Promise.race([document.fonts?.ready, new Promise(r => setTimeout(r, 1500))]).then(reveal), { once: true });
     try {
       const r = await fetch(pick.src);
       if (!r.ok) throw new Error(r.status);
-      const url = URL.createObjectURL(await r.blob());
+      const total = Number(r.headers.get('content-length')) || 0;
+      let blob;
+      if (r.body && total) {
+        const reader = r.body.getReader(), chunks = [];
+        let got = 0;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value); got += value.length;
+          setProgress(0.95 * got / total);
+        }
+        blob = new Blob(chunks, { type: pick.type });
+      } else blob = await r.blob();
       video.querySelectorAll('source').forEach(el => el.remove());
-      video.src = url;
+      video.src = URL.createObjectURL(blob);
       // a device that refuses the in-memory copy streams the file instead
       video.addEventListener('error', () => { video.src = pick.src; video.load(); }, { once: true });
     } catch {
