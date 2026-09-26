@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RI'S ART — Nail Art Studio</title>
+  <meta name="description" content="Hand-painted nail art, gel and extensions by Ri. See the menu and book your chair on WhatsApp.">
+  <meta name="theme-color" content="#241216">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="video" href="assets/film.mp4" type="video/mp4">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ FILM: scroll-scrubbed, text only ============ -->
+  <div class="film" id="film">
+    <div class="stage">
+      <video id="scrub" muted playsinline preload="none" disablepictureinpicture
+             tabindex="-1" aria-hidden="true" poster="assets/poster.jpg">
+        <source src="assets/film.webm" type="video/webm">
+        <source src="assets/film.mp4" type="video/mp4">
+      </video>
+      <div class="scrim"></div>
+    </div>
+    <div class="beats" id="beats"><!-- filled from config.js --></div>
+  </div>
+
+  <!-- ============ STUDIO ============ -->
+  <main class="studio" id="studio">
+
+    <section class="plate" aria-labelledby="plate-h">
+      <img class="plate-logo" src="assets/logo.png" alt="RI'S ART logo" width="380" height="380">
+      <p class="label">Nail art studio · <span data-city></span></p>
+      <h1 id="plate-h">Nails painted by hand,<br><em>one client at a time.</em></h1>
+      <p class="lede">Gel, extensions and hand-painted art by Ri. Every set is planned with you, shaped for your hands, and finished slowly.</p>
+      <div class="plate-actions">
+        <a class="btn btn-lacquer" href="#book">Book a chair</a>
+        <a class="btn btn-line" href="#menu">See the menu</a>
+      </div>
+    </section>
+
+    <section class="menu" id="menu" aria-labelledby="menu-h">
+      <header class="sec-head">
+        <p class="label">The shade card</p>
+        <h2 id="menu-h">Menu &amp; prices</h2>
+        <p class="sec-note">Prices are starting prices. Final price depends on length and art, and is confirmed before we begin.</p>
+      </header>
+      <div id="menu-groups"><!-- filled from config.js --></div>
+    </section>
+
+    <section class="tryon" id="tryon" aria-labelledby="tryon-h">
+      <div class="tryon-copy">
+        <p class="label">Virtual try-on</p>
+        <h2 id="tryon-h">See it on <em>your</em> hands first</h2>
+        <p>Point your phone at the back of your hand. Pick a shade, a design and a shape, and the nails follow your fingers live.</p>
+        <p class="tryon-note">Runs on your phone. Your camera feed and photos never leave it.</p>
+        <div class="tryon-actions">
+          <button class="btn btn-lacquer" type="button" data-tryon="{}">Open camera</button>
+          <label class="btn btn-line" for="tryon-file">Use a photo</label>
+          <input class="visually-hidden" type="file" id="tryon-file" accept="image/*">
+        </div>
+      </div>
+      <figure class="tryon-demo" aria-hidden="true">
+        <div class="phone"><img src="assets/ar/demo.jpg" alt="" width="360" height="640" loading="lazy"></div>
+      </figure>
+    </section>
+
+    <section class="looks" id="looks" aria-labelledby="looks-h">
+      <header class="sec-head">
+        <p class="label">Look book</p>
+        <h2 id="looks-h">Crimson, gloss <em>&amp;</em> gold</h2>
+      </header>
+      <div class="looks-strip" id="looks-strip" tabindex="0" aria-label="Gallery, scroll sideways"></div>
+      <p class="looks-more">More on Instagram: <a data-ig target="_blank" rel="noopener"></a></p>
+    </section>
+
+    <section class="how" aria-labelledby="how-h">
+      <header class="sec-head">
+        <p class="label">Booking</p>
+        <h2 id="how-h">How a visit works</h2>
+      </header>
+      <ol class="steps">
+        <li><h3>Choose a service</h3><p>Pick from the menu, or send a design you love.</p></li>
+        <li><h3>Message on WhatsApp</h3><p>Ri replies with open slots and a price for your art.</p></li>
+        <li><h3>Confirm your slot</h3><p>Your time is held for you alone. No double booking.</p></li>
+        <li><h3>Sit back</h3><p>Shaping, prep, colour and art. Leave with care tips for home.</p></li>
+      </ol>
+    </section>
+
+    <section class="book" id="book" aria-labelledby="book-h">
+      <div class="book-copy">
+        <p class="label">Reserve</p>
+        <h2 id="book-h">Book your chair</h2>
+        <p>Fill this in and it opens WhatsApp with your request ready to send. Nothing is booked until Ri confirms.</p>
+      </div>
+      <form class="book-form" id="book-form" novalidate>
+        <label>
+          <span>Your name</span>
+          <input name="name" autocomplete="given-name" required>
+        </label>
+        <label>
+          <span>Service</span>
+          <select name="service" id="service-select" required></select>
+        </label>
+        <div class="row">
+          <label>
+            <span>Preferred date</span>
+            <input name="date" type="date" required>
+          </label>
+          <label>
+            <span>Time of day</span>
+            <select name="slot">
+              <option>Morning</option>
+              <option selected>Afternoon</option>
+              <option>Evening</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Design idea <small>(optional)</small></span>
+          <textarea name="idea" rows="3" placeholder="Colours, shape, length, or say you'll send a photo"></textarea>
+        </label>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <button class="btn btn-lacquer" type="submit">Send on WhatsApp</button>
+      </form>
+    </section>
+
+    <section class="faq" aria-labelledby="faq-h">
+      <header class="sec-head">
+        <p class="label">Before you come</p>
+        <h2 id="faq-h">Questions &amp; aftercare</h2>
+      </header>
+      <div class="faq-list" id="faq-list"></div>
+    </section>
+
+    <section class="visit" id="visit" aria-labelledby="visit-h">
+      <div>
+        <p class="label">Find us</p>
+        <h2 id="visit-h">Visit the studio</h2>
+        <p class="addr" data-address></p>
+        <a class="btn btn-line" data-map target="_blank" rel="noopener">Open in Maps</a>
+      </div>
+      <div>
+        <p class="label">Hours</p>
+        <dl class="hours" id="hours"></dl>
+        <p class="contact-line">
+          <a data-wa target="_blank" rel="noopener">WhatsApp</a>
+          <a data-tel></a>
+          <a data-ig target="_blank" rel="noopener"></a>
+        </p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <img src="assets/logo.png" alt="" width="56" height="56">
+      <p>© <span id="year"></span> RI'S ART · Nail art studio</p>
+    </footer>
+  </main>
+
+  <a class="book-pill" id="book-pill" href="#book">Book on WhatsApp</a>
+
+  <!-- ============ AR TRY-ON ============ -->
+  <dialog class="ar" id="ar" aria-labelledby="ar-title">
+    <div class="ar-view" id="ar-view" data-mode="live">
+      <video id="ar-video" autoplay muted playsinline disablepictureinpicture></video>
+      <canvas id="ar-photo" hidden></canvas>
+      <canvas id="ar-gl" aria-hidden="true"></canvas>
+      <canvas id="ar-canvas" aria-hidden="true" hidden></canvas>
+      <p class="ar-hint" id="ar-hint" role="status" aria-live="polite" hidden></p>
+    </div>
+
+    <header class="ar-top">
+      <button class="ar-icon" id="ar-close" type="button" aria-label="Close try-on">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h2 id="ar-title">Try on</h2>
+      <div class="ar-top-actions">
+        <button class="ar-icon" id="ar-live" type="button" aria-label="Back to live camera">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        </button>
+        <label class="ar-icon" for="ar-file" aria-label="Try on a photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/><circle cx="15.5" cy="9" r="1.5"/></svg>
+        </label>
+        <input class="visually-hidden" type="file" id="ar-file" accept="image/*">
+        <button class="ar-icon" id="ar-flip" type="button" aria-label="Switch camera" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h11l-3-3M20 15H9l3 3"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="ar-sheet">
+      <p class="ar-look" id="ar-look"></p>
+      <div class="ar-tabs" role="tablist" aria-label="Customise">
+        <button class="ar-tab" role="tab" aria-selected="true" aria-controls="ar-rail-shade" type="button">Shade</button>
+        <button class="ar-tab" role="tab" aria-selected="false" aria-controls="ar-rail-design" type="button">Design</button>
+        <button class="ar-tab" role="tab" aria-selected="false" aria-controls="ar-rail-shape" type="button">Shape</button>
+        <button class="ar-tab" role="tab" aria-selected="false" aria-controls="ar-rail-length" type="button">Length</button>
+      </div>
+      <div class="ar-rail" id="ar-rail-shade" role="radiogroup"></div>
+      <div class="ar-rail" id="ar-rail-design" role="radiogroup" hidden></div>
+      <div class="ar-rail" id="ar-rail-shape" role="radiogroup" hidden></div>
+      <div class="ar-rail" id="ar-rail-length" role="radiogroup" hidden></div>
+      <div class="ar-actions">
+        <button class="ar-shutter" id="ar-shot" type="button" aria-label="Take a picture of this look"></button>
+        <button class="btn btn-lacquer ar-book" id="ar-book" type="button">Book this look</button>
+      </div>
+    </div>
+
+    <div class="ar-result" id="ar-result" hidden>
+      <img id="ar-result-img" alt="Your try-on picture">
+      <div class="ar-result-actions">
+        <button class="btn btn-line" id="ar-result-close" type="button">Keep trying</button>
+        <a class="btn btn-line" id="ar-save" download="risart-try-on.jpg">Save</a>
+        <button class="btn btn-lacquer" id="ar-share" type="button" hidden>Share</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script type="module" src="tryon.js"></script>
+</body>
+</html>

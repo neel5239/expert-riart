@@ -1,0 +1,7 @@
+*.bin binary
+*.task binary
+*.wasm binary
+*.mp4 binary
+*.webm binary
+*.jpg binary
+*.png binary

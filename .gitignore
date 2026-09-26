@@ -1,0 +1,8 @@
+.cert/
+_test/
+_dev/
+raw/
+node_modules/
+*.log
+.DS_Store
+Thumbs.db

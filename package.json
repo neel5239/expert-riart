@@ -1,0 +1,12 @@
+{
+  "name": "risart",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RI'S ART nail studio: scroll film site with AR nail try-on",
+  "scripts": {
+    "start": "node serve.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
