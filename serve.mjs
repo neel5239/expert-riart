@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const hosted = !!process.env.PORT;
+const started = new Date().toISOString();
 const port = Number(process.argv.find(a => /^\d+$/.test(a))) || Number(process.env.PORT) || 8101;
 const secure = process.argv.includes('--https');
 const log = process.argv.includes('--log');     // print each request (to see what a phone loads)
@@ -24,6 +25,12 @@ const types = {
 
 function handler(req, res) {
   if (log) res.on('finish', () => console.log(res.statusCode, req.headers.range || '', req.url, (req.headers['user-agent'] || '').replace(/^.*?\(([^;)]*).*$/, '$1')));
+  // which build is live: compare with the latest commit on GitHub (Railway sets RAILWAY_GIT_COMMIT_SHA)
+  if (req.url === '/version') {
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ commit: (process.env.RAILWAY_GIT_COMMIT_SHA || 'local').slice(0, 7), started }));
+    return;
+  }
   let rel;
   try { rel = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch { res.writeHead(400).end(); return; }
   if (rel.endsWith('/')) rel += 'index.html';
@@ -67,7 +74,8 @@ const lan = Object.values(os.networkInterfaces()).flat().filter(i => i && i.fami
 
 if (!secure) {
   const host = hosted ? '0.0.0.0' : '127.0.0.1';
-  http.createServer(handler).listen(port, host, () => console.log(`RI'S ART on http://${hosted ? host : 'localhost'}:${port}`));
+  http.createServer(handler).listen(port, host, () => console.log(`RI'S ART on http://${hosted ? host : 'localhost'}:${port}` +
+    (process.env.RAILWAY_GIT_COMMIT_SHA ? ` (commit ${process.env.RAILWAY_GIT_COMMIT_SHA.slice(0, 7)})` : '')));
 } else {
   // self-signed certificate for localhost + this machine's Wi-Fi addresses (made once, kept in .cert/)
   const dir = path.join(root, '.cert');
