@@ -4,7 +4,7 @@
 window.RISART = {
   brand: "RI'S ART",
   city: "Your City",                         // PLACEHOLDER
-  whatsapp: "910000000000",                  // PLACEHOLDER — country code + number, digits only
+  whatsapp: "919825744110",                  // country code + number, digits only
   phone: "+91 00000 00000",                  // PLACEHOLDER
   instagram: "risart.nails",                 // PLACEHOLDER — handle without @
   address: "Studio address, Area, City 000000", // PLACEHOLDER
