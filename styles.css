@@ -720,13 +720,18 @@ html.ar-open { overflow: hidden; }
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 2rem var(--gutter) calc(2rem + env(safe-area-inset-bottom));
+  padding: 2rem var(--gutter) calc(6rem + env(safe-area-inset-bottom));   /* room for the floating book pill */
   border-top: 1px solid rgba(184,146,90,.3);
   font-size: .85rem;
   color: var(--ink-soft);
 }
 .foot img { border-radius: 50%; width: 40px; height: 40px; }
 .foot p { margin: 0; }
+.foot { flex-wrap: wrap; }
+.foot-contact { margin-left: auto !important; display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; }
+.foot-contact a, .book-alt a { color: var(--lacquer); text-decoration: none; border-bottom: 1px solid rgba(168,18,46,.3); }
+.foot-contact a:hover, .book-alt a:hover { border-bottom-color: currentColor; }
+.book-alt { font-size: .95rem; opacity: .85; }
 
 /* ---------- floating book pill: only after the film ---------- */
 .book-pill {
