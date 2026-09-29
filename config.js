@@ -6,6 +6,7 @@ window.RISART = {
   city: "Your City",                         // PLACEHOLDER
   whatsapp: "919825744110",                  // country code + number, digits only
   phone: "+91 98257 44110",
+  email: "neel43916@gmail.com",
   instagram: "risart.nails",                 // PLACEHOLDER — handle without @
   address: "Studio address, Area, City 000000", // PLACEHOLDER
   mapUrl: "https://maps.google.com/?q=RI'S+ART", // PLACEHOLDER

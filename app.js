@@ -58,6 +58,7 @@
   document.querySelectorAll('[data-map]').forEach(el => el.href = C.mapUrl);
   document.querySelectorAll('[data-wa]').forEach(el => el.href = wa(`Hi Ri, I'd like to book a nail appointment.`));
   document.querySelectorAll('[data-tel]').forEach(el => { el.href = 'tel:' + C.phone.replace(/\s/g, ''); el.textContent = C.phone; });
+  document.querySelectorAll('[data-mail]').forEach(el => { if (C.email) { el.href = 'mailto:' + C.email; el.textContent = C.email; } else el.remove(); });
   document.querySelectorAll('[data-ig]').forEach(el => { el.href = 'https://instagram.com/' + C.instagram; el.textContent = '@' + C.instagram; });
   $('#year').textContent = new Date().getFullYear();
 
